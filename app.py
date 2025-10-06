@@ -1,7 +1,3 @@
-# ==============================================================================
-# PART 2: STREAMLIT APP SCRIPT (app.py) FOR INFERENCE
-# ==============================================================================
-
 import streamlit as st
 import tensorflow as tf
 from tensorflow.keras.models import load_model
@@ -9,19 +5,17 @@ import numpy as np
 from PIL import Image
 import os
 
-# --- PAGE CONFIGURATION ---
 st.set_page_config(
     page_title="Fashion Classifier",
     page_icon="🚀",
     layout="wide"
 )
 
-# --- CONSTANTS ---
 CLASS_NAMES = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 MODEL_PATH = 'best_model.keras'
 
-# --- HELPER FUNCTIONS ---
+
 @st.cache_resource
 def load_trained_model(path):
     """Loads the pre-trained Keras model from the specified path."""
@@ -56,16 +50,13 @@ def process_image(uploaded_file):
         st.error(f"Error processing image: {e}")
         return None
 
-# --- MAIN APPLICATION ---
-st.title("🚀 Fashion Item Classifier")
+st.title("👕 Fashion Item Classifier")
 st.write("Upload an image of a clothing item, and this app will predict its category using a trained Convolutional Neural Network.")
-st.info("This app uses a model pre-trained in Google Colab. The code for training can be found separately.")
+st.info("This app uses a pre-trained model on 70k clothing items.")
 
-# Load the model
 model = load_trained_model(MODEL_PATH)
 
 if model:
-    # --- USER IMAGE PREDICTION SECTION ---
     st.header("👕 Predict Your Own Image")
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
@@ -88,7 +79,6 @@ if model:
                     st.success(f"Prediction: **{predicted_class_name}**")
                     st.write(f"Confidence: **{confidence:.2f}%**")
                     
-                    # Display probabilities
                     st.write("Prediction Probabilities:")
                     prob_data = {CLASS_NAMES[i]: prediction[0][i] for i in range(10)}
                     st.bar_chart(prob_data)
